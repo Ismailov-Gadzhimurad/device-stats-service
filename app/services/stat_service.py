@@ -25,7 +25,14 @@ class StatService:
         entities = self._repository.find_by_device_id(device_id, from_date, to_date)
 
         if not entities:
-            raise ValueError(f"No data found for device: {device_id}")
+            return StatResponse(
+                device_id=device_id,
+                min_value=0.0,
+                max_value=0.0,
+                count=0,
+                sum_value=0.0,
+                median_value=0.0
+            )
 
         values = self._extract_all_values(entities)
 

@@ -2,7 +2,7 @@ services:
   mysql:
     image: mysql:8.0
     container_name: stats_mysql
-    command: --default-authentication-plugin=mysql_native_password  # ← добавить
+    command: --default-authentication-plugin=mysql_native_password
     environment:
       MYSQL_ROOT_PASSWORD: qwerty
       MYSQL_DATABASE: stats_db
@@ -30,6 +30,16 @@ services:
       DB_USER: root
       DB_PASSWORD: qwerty
       DB_NAME: stats_db
+
+  locust:
+    image: locustio/locust
+    ports:
+      - "8089:8089"
+    volumes:
+      - ./locustfile.py:/mnt/locust/locustfile.py
+    command: -f /mnt/locust/locustfile.py --host http://api:8001
+    depends_on:
+      - api
 
 volumes:
   mysql_data:
